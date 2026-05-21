@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>04_desafio.html - Missão Variáveis</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f8fafc;
+    color: #0f172a;
+    line-height: 1.6;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .badge {
+    background: #3b82f6;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  h1 {
+    font-size: 1.8rem;
+    flex: 1;
+  }
+  .feedback-btn {
+    background: #22c55e;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: none;
+  }
+  .context-box {
+    background: #e0f2fe;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+  }
+  .two-columns {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .left-column, .right-column {
+    flex: 1;
+    min-width: 300px;
+  }
+  .section {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+  }
+  .requisito {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  .requisito input[type="checkbox"] {
+    margin-top: 4px;
+  }
+  .requisito label {
+    flex: 1;
+  }
+  .requisito.concluido label {
+    text-decoration: line-through;
+    color: #64748b;
+  }
+  .bonus {
+    background: #fef3c7;
+    padding: 12px;
+    border-radius: 8px;
+    font-style: italic;
+  }
+  .progress-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .progress-text {
+    font-weight: 600;
+  }
+  .progress-bar-bg {
+    background: #e2e8f0;
+    height: 10px;
+    flex: 1;
+    min-width: 100px;
+    border-radius: 5px;
+  }
+  .progress-bar-fill {
+    background: #3b82f6;
+    height: 100%;
+    width: 0%;
+    border-radius: 5px;
+    transition: width 0.3s;
+  }
+  .timer-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .timer-display {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: monospace;
+  }
+  .btn {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .btn-reset {
+    background: #ef4444;
+  }
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .ref-box {
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 16px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+    white-space: pre-wrap;
+  }
+  .cta {
+    text-align: center;
+    margin: 20px 0;
+  }
+  .cta a {
+    background: #3b82f6;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-block;
+  }
+  .mission-complete {
+    display: none;
+    background: #22c55e;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 16px;
+  }
+  .footer {
+    text-align: center;
+    margin-top: 30px;
+    padding: 16px;
+    color: #64748b;
+    border-top: 1px solid #e2e8f0;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="badge">Desafio Autônomo · 40 min</span>
+    <h1>Missão Variáveis — declarar, armazenar e exibir</h1>
+    <a href="05_feedback.html" class="feedback-btn" id="feedbackBtn">Feedback →</a>
+  </div>
+
+  <div class="context-box">
+    Você é um Robô em uma missão de reconhecimento. Precisa organizar as informações da sua base de dados. Complete os 4 requisitos para ativar o sistema de armazenamento.
+  </div>
+
+  <div class="two-columns">
+    <div class="left-column">
+      <div class="section">
+        <h2>📝 Requisitos — marque conforme concluir</h2>
+        <div id="requisitos">
+          <div class="requisito" data-index="0">
+            <input type="checkbox" id="req0" class="req-check">
+            <label for="req0"><strong>1. Declarar nome do robô:</strong> Crie uma variável <code>let</code> com o nome do seu robô</label>
+          </div>
+          <div class="requisito" data-index="1">
+            <input type="checkbox" id="req1" class="req-check">
+            <label for="req1"><strong>2. Declarar nível da missão:</strong> Crie uma constante <code>const</code> com o nível da missão (1 a 10)</label>
+          </div>
+          <div class="requisito" data-index="2">
+            <input type="checkbox" id="req2" class="req-check">
+            <label for="req2"><strong>3. Declarar status:</strong> Crie uma variável <code>let</code> com valor booleano (true/false) para status ativo</label>
+          </div>
+          <div class="requisito" data-index="3">
+            <input type="checkbox" id="req3" class="req-check">
+            <label for="req3"><strong>4. Exibir relatório:</strong> Use <code>console.log</code> para exibir as 3 variáveis + use <code>typeof</code> em cada uma</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-column">
+      <div class="section">
+        <h2>📋 O que entregar</h2>
+        <ul>
+          <li>Código com 3 variáveis declaradas (let e const)</li>
+          <li>Valores dos 3 tipos primitivos</li>
+          <li>Relatório com console.log</li>
+          <li>typeof para cada variável</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2>⭐ Critérios de Avaliação</h2>
+        <ul>
+          <li>Usou let e const corretamente</li>
+          <li>Usou string, number e boolean</li>
+          <li>Exibiu com console.log</li>
+          <li>Usou typeof</li>
+        </ul>
+      </div>
+      <div class="bonus">
+        <strong>Bônus 🏆</strong>: Usou comentários para explicar cada declaração
+      </div>
+    </div>
+  </div>
+
+  <div class="timer-area">
+    <span class="timer-display" id="timerDisplay">⏱ 00:00</span>
+    <button class="btn" id="startBtn">▶ Iniciar Missão</button>
+    <button class="btn btn-reset" id="resetBtn">⏹ Reset</button>
+  </div>
+
+  <div class="progress-area">
+    <span class="progress-text" id="progressText">0 / 4 requisitos</span>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <div class="ref-box">
+let nome = "Robô";
+const NIVEL = 5;
+let ativo = true;
+typeof nome → "string"
+  </div>
+
+  <div class="cta">
+    <a href="05_feedback.html" id="feedbackCta">➜ Ver Feedback do Professor</a>
+  </div>
+
+  <div class="mission-complete" id="missionComplete">🎉 Missão Cumprida!</div>
+
+  <div class="footer">🏆 Aula 2 · Projeto @karizeviecelli</div>
+
+<script>
+  (function() {
+    const checkboxes = document.querySelectorAll('.req-check');
+    const progressText = document.getElementById('progressText');
+    const progressFill = document.getElementById('progressFill');
+    const feedbackBtn = document.getElementById('feedbackBtn');
+    const missionComplete = document.getElementById('missionComplete');
+    const feedbackCta = document.getElementById('feedbackCta');
+
+    function updateProgress() {
+      const checked = document.querySelectorAll('.req-check:checked').length;
+      const total = checkboxes.length;
+      progressText.textContent = `${checked} / ${total} requisitos`;
+      progressFill.style.width = `${(checked / total) * 100}%`;
+      
+      // Show/hide feedback button and mission complete
+      const allDone = checked === total;
+      feedbackBtn.style.display = allDone ? 'inline-block' : 'none';
+      missionComplete.style.display = allDone ? 'block' : 'none';
+      
+      // Optionally disable feedback CTA? No, keep it always visible but the button above is conditional.
+    }
+
+    checkboxes.forEach(chk => {
+      chk.addEventListener('change', function() {
+        const parent = this.closest('.requisito');
+        if (this.checked) {
+          parent.classList.add('concluido');
+        } else {
+          parent.classList.remove('concluido');
+        }
+        updateProgress();
+      });
+    });
+
+    // Timer logic
+    let timerInterval = null;
+    let seconds = 0;
+    const timerDisplay = document.getElementById('timerDisplay');
+    const startBtn = document.getElementById('startBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    function formatTime(secs) {
+      const m = String(Math.floor(secs / 60)).padStart(2, '0');
+      const s = String(secs % 60).padStart(2, '0');
+      return `⏱ ${m}:${s}`;
+    }
+
+    function startTimer() {
+      if (timerInterval) return;
+      timerInterval = setInterval(() => {
+        seconds++;
+        timerDisplay.textContent = formatTime(seconds);
+      }, 1000);
+      startBtn.disabled = true;
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      seconds = 0;
+      timerDisplay.textContent = '⏱ 00:00';
+      startBtn.disabled = false;
+    }
+
+    startBtn.addEventListener('click', startTimer);
+    resetBtn.addEventListener('click', resetTimer);
+
+    // Initial update
+    updateProgress();
+  })();
+</script>
+</body>
+</html>

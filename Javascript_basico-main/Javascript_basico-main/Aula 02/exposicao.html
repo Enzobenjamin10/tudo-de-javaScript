@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 2 - Variáveis e Constantes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Topbar */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #0891b2;
+            color: #fff;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .topbar h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .topbar .timer {
+            font-size: 1rem;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+        /* Slides container */
+        .slides-container {
+            margin-top: 70px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+        .slide {
+            display: none;
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: opacity 0.5s ease;
+        }
+        .slide.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .slide h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #0891b2;
+        }
+        .slide p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .slide ul {
+            list-style: none;
+            padding: 0;
+        }
+        .slide li {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            padding-left: 20px;
+            position: relative;
+        }
+        .slide li::before {
+            content: "▸";
+            color: #0891b2;
+            position: absolute;
+            left: 0;
+        }
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            white-space: pre-wrap;
+        }
+        .highlight-box {
+            background: #e0f2fe;
+            border-left: 4px solid #0891b2;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .cta-btn {
+            display: inline-block;
+            background: #0891b2;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .cta-btn:hover {
+            background: #067a96;
+        }
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .arrow {
+            background: #0891b2;
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            padding: 10px 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .arrow:hover {
+            background: #067a96;
+        }
+        .arrow:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .dots {
+            display: flex;
+            gap: 8px;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .dot.active {
+            background: #0891b2;
+        }
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #1e293b;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        .footer a {
+            color: #0891b2;
+            text-decoration: none;
+        }
+        @media (max-width: 600px) {
+            .topbar {
+                flex-direction: column;
+                gap: 8px;
+                padding: 12px;
+            }
+            .topbar h1 {
+                font-size: 1rem;
+            }
+            .slide {
+                padding: 20px;
+            }
+            .slide h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <h1>Aula 2 - Variáveis e Constantes</h1>
+        <div class="timer" id="timer">00:00</div>
+    </div>
+
+    <div class="slides-container">
+        <!-- Slides -->
+        <div class="slide active" data-index="0">
+            <h2>O que são Variáveis?</h2>
+            <p>Variável é um espaço na memória que guarda um valor. Imagine uma caixa com uma etiqueta — a etiqueta é o nome da variável, o conteúdo é o valor.</p>
+            <div class="code-block"><code>let nome = "Sora"; // criamos a caixa "nome" e guardamos "Sora" dentro</code></div>
+            <p>Cada variável tem um nome único e um valor que pode ser alterado durante a execução do programa.</p>
+        </div>
+
+        <div class="slide" data-index="1">
+            <h2>Declaração com <code>let</code></h2>
+            <p>Usamos <code>let</code> para criar variáveis que podem ter seu valor alterado.</p>
+            <div class="code-block"><code>let idade = 16;<br>idade = 17; // o valor mudou!</code></div>
+            <p><code>let</code> é a forma moderna e segura de declarar variáveis no JavaScript. Permite reatribuição, mas não redeclaração no mesmo escopo.</p>
+        </div>
+
+        <div class="slide" data-index="2">
+            <h2>Declaração com <code>const</code></h2>
+            <p>Usamos <code>const</code> para criar constantes — valores que não mudam. Depois de declarada, não pode ser reatribuída.</p>
+            <div class="code-block"><code>const PI = 3.14159;<br>PI = 3; // Erro! Constante não pode ser reatribuída</code></div>
+            <div class="highlight-box">Use <code>const</code> sempre que o valor não precisar mudar. É uma boa prática.</div>
+        </div>
+
+        <div class="slide" data-index="3">
+            <h2>Tipos Primitivos: string, number, boolean</h2>
+            <p>JavaScript tem 3 tipos primitivos principais:</p>
+            <ul>
+                <li><strong>string</strong> — texto, entre aspas. Ex: <code>let nome = "Ana";</code></li>
+                <li><strong>number</strong> — números, inteiros ou decimais. Ex: <code>let idade = 25;</code></li>
+                <li><strong>boolean</strong> — verdadeiro ou falso. Ex: <code>let estudante = true;</code></li>
+            </ul>
+            <p>Esses são os blocos fundamentais para construir dados.</p>
+        </div>
+
+        <div class="slide" data-index="4">
+            <h2><code>typeof</code> para verificar tipos</h2>
+            <p>O operador <code>typeof</code> revela o tipo de um valor. Útil para depuração e para entender que tipo de dado você está manipulando.</p>
+            <div class="code-block"><code>typeof "Olá"  → "string"<br>typeof 42     → "number"<br>typeof true   → "boolean"</code></div>
+            <div class="highlight-box">Experimente no console do navegador!</div>
+        </div>
+
+        <div class="slide" data-index="5">
+            <h2>Conversão de tipos</h2>
+            <p>Às vezes precisamos converter um tipo em outro.</p>
+            <div class="code-block"><code>Number("123") → 123<br>String(456)   → "456"</code></div>
+            <p>Cuidado: <code>"10" + 5</code> = <code>"105"</code> (concatena), <code>Number("10") + 5</code> = <code>15</code> (soma).</p>
+        </div>
+
+        <div class="slide" data-index="6">
+            <h2>Escopo e boas práticas de nomeação</h2>
+            <p>Escopo é onde a variável existe. <code>let</code> e <code>const</code> têm escopo de bloco <code>{}</code>.</p>
+            <p>Nomes devem ser descritivos e seguir <strong>camelCase</strong> (primeira letra minúscula, próximas palavras maiúsculas).</p>
+            <div class="code-block"><code>let nomeCompleto;<br>let idadeDoUsuario;</code></div>
+            <p>Evite nomes genéricos como <code>x</code>, <code>valor</code>, <code>temp</code>.</p>
+        </div>
+
+        <div class="slide" data-index="7">
+            <h2>Diferenças entre var, let e const</h2>
+            <ul>
+                <li><strong>var</strong>: escopo global/função, pode ser redeclarada (antiga, evitar).</li>
+                <li><strong>let</strong>: escopo de bloco, pode ser reatribuída (moderna, usar).</li>
+                <li><strong>const</strong>: escopo de bloco, <strong>NÃO</strong> pode ser reatribuída (moderna, usar).</li>
+            </ul>
+            <div class="highlight-box">Regra prática: prefira <code>const</code>, use <code>let</code> quando precisar reatribuir, nunca use <code>var</code>.</div>
+            <p>Ao final, siga para a demonstração prática!</p>
+            <a href="02_demo.html" class="cta-btn">➜ Seguir para a Demonstração</a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav">
+        <button class="arrow" id="prevBtn" onclick="changeSlide(-1)">◀</button>
+        <div class="dots" id="dots"></div>
+        <button class="arrow" id="nextBtn" onclick="changeSlide(1)">▶</button>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        📖 Aula 2 · Projeto @karizeviecelli
+    </div>
+
+    <script>
+        // Timer
+        let seconds = 0;
+        const timerEl = document.getElementById('timer');
+        setInterval(() => {
+            seconds++;
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            timerEl.textContent = `${mins}:${secs}`;
+        }, 1000);
+
+        // Slides navigation
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dotsContainer = document.getElementById('dots');
+        const totalSlides = slides.length;
+
+        // Create dots
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsContainer.appendChild(dot);
+        }
+
+        function goToSlide(index) {
+            slides[currentSlide].classList.remove('active');
+            document.querySelectorAll('.dot')[currentSlide].classList.remove('active');
+            currentSlide = index;
+            slides[currentSlide].classList.add('active');
+            document.querySelectorAll('.dot')[currentSlide].classList.add('active');
+            updateButtons();
+        }
+
+        function changeSlide(step) {
+            let newIndex = currentSlide + step;
+            if (newIndex < 0) newIndex = 0;
+            if (newIndex >= totalSlides) newIndex = totalSlides - 1;
+            if (newIndex !== currentSlide) {
+                goToSlide(newIndex);
+            }
+        }
+
+        function updateButtons() {
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+
+        // Initialize buttons
+        updateButtons();
+    </script>
+</body>
+</html>

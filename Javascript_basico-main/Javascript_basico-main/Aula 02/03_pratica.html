@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula 2 - Prática</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+  body { background: #f4f7fc; display: flex; justify-content: center; padding: 20px; }
+  .container { max-width: 800px; width: 100%; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 30px; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .topbar h1 { font-size: 1.5rem; color: #333; }
+  .timer { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; }
+  .timer button { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #007bff; }
+  .progress-bar { height: 8px; background: #e0e0e0; border-radius: 4px; margin-bottom: 20px; }
+  .progress-fill { height: 100%; background: #28a745; border-radius: 4px; transition: width 0.3s; width: 0%; }
+  .card { background: #f9f9f9; border-radius: 8px; padding: 15px; margin-bottom: 15px; border: 1px solid #ddd; }
+  .card-header { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .card-header input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; }
+  .card-header h3 { flex: 1; font-size: 1rem; color: #333; }
+  .card-body { display: none; margin-top: 10px; }
+  .card-body.show { display: block; }
+  .instrucao, .dica { margin-bottom: 10px; font-size: 0.95rem; color: #555; }
+  .dica { background: #fff3cd; padding: 8px; border-radius: 4px; border-left: 4px solid #ffc107; }
+  .btn-gabarito { background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+  .gabarito { display: none; background: #2d2d2d; color: #f8f8f2; padding: 10px; border-radius: 4px; margin-top: 10px; font-family: 'Courier New', monospace; font-size: 0.9rem; overflow-x: auto; white-space: pre-wrap; }
+  .gabarito.show { display: block; }
+  .cta { display: none; text-align: center; margin-top: 20px; padding: 20px; background: #d4edda; border-radius: 8px; }
+  .cta.show { display: block; }
+  .cta a { display: inline-block; background: #28a745; color: white; padding: 12px 30px; border-radius: 6px; text-decoration: none; font-weight: bold; }
+  .footer { text-align: center; margin-top: 20px; color: #888; font-size: 0.85rem; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="topbar">
+    <h1>🛠 Aula 2 · Prática</h1>
+    <div class="timer">
+      <span id="timerDisplay">00:00</span>
+      <button id="timerToggle">▶</button>
+    </div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+  <!-- Passo 1 -->
+  <div class="card" data-step="1">
+    <div class="card-header" onclick="toggleCard(this)">
+      <input type="checkbox" onchange="updateProgress()">
+      <h3>Passo 1 - Declare três variáveis com let e atribua valores</h3>
+    </div>
+    <div class="card-body">
+      <div class="instrucao">Crie três variáveis usando let. Uma com seu nome (string), uma com sua idade (number) e uma com seu hobbie favorito (string). Exiba cada uma no console.</div>
+      <div class="dica">Dica: Use console.log() para ver o valor de cada variável.</div>
+      <button class="btn-gabarito" onclick="toggleGabarito(this)">📖 Gabarito</button>
+      <div class="gabarito">let nome = "Ana"; let idade = 22; let hobbie = "ler"; console.log(nome); console.log(idade); console.log(hobbie);</div>
+    </div>
+  </div>
+
+  <!-- Passo 2 -->
+  <div class="card" data-step="2">
+    <div class="card-header" onclick="toggleCard(this)">
+      <input type="checkbox" onchange="updateProgress()">
+      <h3>Passo 2 - Crie uma constante para PI</h3>
+    </div>
+    <div class="card-body">
+      <div class="instrucao">Crie uma constante chamada PI com o valor 3.14159. Depois crie outra variável com o raio de um círculo e calcule a área (PI * raio * raio). Exiba o resultado.</div>
+      <div class="dica">Dica: const não pode ser reatribuída.</div>
+      <button class="btn-gabarito" onclick="toggleGabarito(this)">📖 Gabarito</button>
+      <div class="gabarito">const PI = 3.14159; let raio = 5; let area = PI * raio * raio; console.log(area);</div>
+    </div>
+  </div>
+
+  <!-- Passo 3 -->
+  <div class="card" data-step="3">
+    <div class="card-header" onclick="toggleCard(this)">
+      <input type="checkbox" onchange="updateProgress()">
+      <h3>Passo 3 - Use typeof para cada tipo primitivo</h3>
+    </div>
+    <div class="card-body">
+      <div class="instrucao">Crie uma variável de cada tipo primitivo e use typeof para descobrir o tipo de cada uma.</div>
+      <div class="dica">Dica: typeof variavel retorna o tipo como string.</div>
+      <button class="btn-gabarito" onclick="toggleGabarito(this)">📖 Gabarito</button>
+      <div class="gabarito">let nome = "João"; let idade = 30; let ativo = true; console.log(typeof nome); console.log(typeof idade); console.log(typeof ativo);</div>
+    </div>
+  </div>
+
+  <!-- Passo 4 -->
+  <div class="card" data-step="4">
+    <div class="card-header" onclick="toggleCard(this)">
+      <input type="checkbox" onchange="updateProgress()">
+      <h3>Passo 4 - Converta string para número</h3>
+    </div>
+    <div class="card-body">
+      <div class="instrucao">Crie uma string com um número dentro e converta para número usando Number().</div>
+      <div class="dica">Dica: Number() converte string para número.</div>
+      <button class="btn-gabarito" onclick="toggleGabarito(this)">📖 Gabarito</button>
+      <div class="gabarito">let stringNumero = "50"; let numero = Number(stringNumero); let resultado = numero + 10; console.log(resultado);</div>
+    </div>
+  </div>
+
+  <!-- Passo 5 -->
+  <div class="card" data-step="5">
+    <div class="card-header" onclick="toggleCard(this)">
+      <input type="checkbox" onchange="updateProgress()">
+      <h3>Passo 5 - Teste escopo com bloco de código</h3>
+    </div>
+    <div class="card-body">
+      <div class="instrucao">Crie uma variável let fora de um bloco { }. Dentro do bloco, crie outra com o mesmo nome mas valor diferente. Exiba os valores.</div>
+      <div class="dica">Dica: Variáveis let dentro de { } só existem dentro daquele bloco.</div>
+      <button class="btn-gabarito" onclick="toggleGabarito(this)">📖 Gabarito</button>
+      <div class="gabarito">let mensagem = "Fora"; { let mensagem = "Dentro"; console.log(mensagem); } console.log(mensagem);</div>
+    </div>
+  </div>
+
+  <!-- Passo 6 -->
+  <div class="card" data-step="6">
+    <div class="card-header" onclick="toggleCard(this)">
+      <input type="checkbox" onchange="updateProgress()">
+      <h3>Passo 6 - Renomeie variáveis seguindo padrão camelCase</h3>
+    </div>
+    <div class="card-body">
+      <div class="instrucao">Renomeie variáveis com nomes ruins para camelCase descritivos.</div>
+      <div class="dica">Dica: camelCase: primeira minúscula, próximas maiúsculas.</div>
+      <button class="btn-gabarito" onclick="toggleGabarito(this)">📖 Gabarito</button>
+      <div class="gabarito">let nome = "João"; let idade = 25; let cidade = "SP"; console.log(nome, idade, cidade);</div>
+    </div>
+  </div>
+
+  <div class="cta" id="cta">
+    <p>Todos os passos concluídos!</p>
+    <a href="04_desafio.html">➜ Seguir para o Desafio</a>
+  </div>
+
+  <div class="footer">🛠 Aula 2 · Projeto @karizeviecelli</div>
+</div>
+
+<script>
+  let timerInterval = null;
+  let seconds = 0;
+  const timerDisplay = document.getElementById('timerDisplay');
+  const timerToggle = document.getElementById('timerToggle');
+
+  timerToggle.addEventListener('click', function() {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      timerToggle.textContent = '▶';
+    } else {
+      timerInterval = setInterval(() => {
+        seconds++;
+        const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+        const secs = String(seconds % 60).padStart(2, '0');
+        timerDisplay.textContent = mins + ':' + secs;
+      }, 1000);
+      timerToggle.textContent = '⏸';
+    }
+  });
+
+  function toggleCard(header) {
+    const body = header.nextElementSibling;
+    if (body.style.display === 'block') {
+      body.style.display = 'none';
+    } else {
+      body.style.display = 'block';
+    }
+  }
+
+  function toggleGabarito(btn) {
+    const gab = btn.nextElementSibling;
+    gab.classList.toggle('show');
+  }
+
+  function updateProgress() {
+    const checkboxes = document.querySelectorAll('.card input[type="checkbox"]');
+    const total = checkboxes.length;
+    let checked = 0;
+    checkboxes.forEach(cb => { if (cb.checked) checked++; });
+    const percent = (checked / total) * 100;
+    document.getElementById('progressFill').style.width = percent + '%';
+    if (checked === total) {
+      document.getElementById('cta').classList.add('show');
+    } else {
+      document.getElementById('cta').classList.remove('show');
+    }
+  }
+</script>
+</body>
+</html>
