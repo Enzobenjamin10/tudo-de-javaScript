@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula 2 - Variáveis e Constantes</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #1e1e1e;
+      color: #d4d4d4;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 50px;
+      background: #2d2d2d;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      border-bottom: 1px solid #3c3c3c;
+      z-index: 100;
+    }
+    .topbar h1 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #569cd6;
+    }
+    .timer {
+      font-size: 16px;
+      font-family: monospace;
+      color: #ce9178;
+    }
+    .controls {
+      position: fixed;
+      top: 50px;
+      width: 100%;
+      height: 44px;
+      background: #252526;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 20px;
+      border-bottom: 1px solid #3c3c3c;
+      z-index: 99;
+    }
+    .controls button {
+      background: #0e639c;
+      border: none;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+    .controls button:hover {
+      background: #1177bb;
+    }
+    .controls button:active {
+      background: #0d568c;
+    }
+    .container {
+      display: flex;
+      margin-top: 94px;
+      flex: 1;
+      min-height: 0;
+    }
+    .editor, .output {
+      width: 50%;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .editor {
+      background: #1e1e1e;
+      border-right: 1px solid #3c3c3c;
+    }
+    .output {
+      background: #1e1e1e;
+    }
+    .code-display {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 16px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .code-display .k {
+      color: #569cd6;
+    }
+    .code-display .s {
+      color: #ce9178;
+    }
+    .code-display .v {
+      color: #b5cea8;
+    }
+    .console {
+      margin-top: 20px;
+      background: #1e1e1e;
+      border: 1px solid #3c3c3c;
+      padding: 10px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      min-height: 80px;
+      color: #dcdcaa;
+    }
+    .console p {
+      margin: 2px 0;
+    }
+    .footer {
+      position: relative;
+      background: #2d2d2d;
+      padding: 12px 20px;
+      text-align: center;
+      border-top: 1px solid #3c3c3c;
+      font-size: 14px;
+      color: #888;
+    }
+    .footer a {
+      color: #569cd6;
+      text-decoration: none;
+      margin-left: 10px;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <h1>Aula 2 - Variáveis e Constantes</h1>
+    <div class="timer" id="timer">00:00</div>
+  </div>
+  <div class="controls">
+    <button id="btnExecutar">▶ Executar</button>
+    <button id="btnReset">⏹ Reset</button>
+    <button id="btnRapido">⚡ Rápido</button>
+  </div>
+  <div class="container">
+    <div class="editor">
+      <div class="code-display" id="codeDisplay"></div>
+    </div>
+    <div class="output">
+      <div class="console" id="console"></div>
+    </div>
+  </div>
+  <div class="footer">
+    💻 Aula 2 · Projeto @karizeviecelli
+    <a href="03_pratica.html">➜ Seguir para a Prática</a>
+  </div>
+
+  <script>
+    const lines = [
+      "let nome = \"Sora\";",
+      "const idade = 16;",
+      "let estudante = true;",
+      "console.log(nome);",
+      "console.log(idade);",
+      "console.log(estudante);"
+    ];
+    const codeDisplay = document.getElementById('codeDisplay');
+    const consoleDiv = document.getElementById('console');
+    const timerEl = document.getElementById('timer');
+    let intervalId = null;
+    let currentLine = 0;
+    let charIndex = 0;
+    let typedText = '';
+    let isRapido = false;
+    let delay = 80;
+    let startTime = null;
+    let timerInterval = null;
+
+    function updateTimer() {
+      if (!startTime) return;
+      const elapsed = Date.now() - startTime;
+      const secs = Math.floor(elapsed / 1000);
+      const mins = Math.floor(secs / 60);
+      const remainingSecs = secs % 60;
+      timerEl.textContent = `${String(mins).padStart(2, '0')}:${String(remainingSecs).padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      startTime = Date.now();
+      timerInterval = setInterval(updateTimer, 100);
+    }
+
+    function stopTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    function resetTimer() {
+      stopTimer();
+      timerEl.textContent = '00:00';
+      startTime = null;
+    }
+
+    function highlightSyntax(code) {
+      // Strip leading whitespace for highlighting
+      const escaped = code
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+      // Apply highlighting: keywords (let, const, console.log), strings ("..."), values (numbers, true, false)
+      let highlighted = escaped.replace(/(\blet\b|\bconst\b|\bconsole\.log\b)/g, '<span class="k">$1</span>');
+      highlighted = highlighted.replace(/("[^"]*")/g, '<span class="s">$1</span>');
+      highlighted = highlighted.replace(/\b(\d+|true|false)\b/g, '<span class="v">$1</span>');
+      return highlighted;
+    }
+
+    function typeNextChar() {
+      if (currentLine >= lines.length) {
+        // Done typing, show console outputs
+        showConsoleOutputs();
+        stopTimer();
+        clearInterval(intervalId);
+        intervalId = null;
+        return;
+      }
+      const line = lines[currentLine];
+      if (charIndex < line.length) {
+        typedText += line[charIndex];
+        codeDisplay.innerHTML = highlightSyntax(typedText);
+        charIndex++;
+      } else {
+        // Move to next line
+        typedText += '\n';
+        codeDisplay.innerHTML = highlightSyntax(typedText);
+        currentLine++;
+        charIndex = 0;
+      }
+    }
+
+    function showConsoleOutputs() {
+      consoleDiv.innerHTML = '';
+      const outputs = ['Sora', '16', 'true'];
+      outputs.forEach(out => {
+        const p = document.createElement('p');
+        p.textContent = `> ${out}`;
+        consoleDiv.appendChild(p);
+      });
+    }
+
+    function startExecution() {
+      if (intervalId) return;
+      resetToInitial();
+      startTimer();
+      intervalId = setInterval(typeNextChar, delay);
+    }
+
+    function resetToInitial() {
+      clearInterval(intervalId);
+      intervalId = null;
+      typedText = '';
+      currentLine = 0;
+      charIndex = 0;
+      codeDisplay.innerHTML = '';
+      consoleDiv.innerHTML = '';
+      resetTimer();
+    }
+
+    function toggleRapido() {
+      isRapido = !isRapido;
+      delay = isRapido ? 20 : 80;
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = setInterval(typeNextChar, delay);
+      }
+    }
+
+    document.getElementById('btnExecutar').addEventListener('click', startExecution);
+    document.getElementById('btnReset').addEventListener('click', resetToInitial);
+    document.getElementById('btnRapido').addEventListener('click', toggleRapido);
+  </script>
+</body>
+</html>

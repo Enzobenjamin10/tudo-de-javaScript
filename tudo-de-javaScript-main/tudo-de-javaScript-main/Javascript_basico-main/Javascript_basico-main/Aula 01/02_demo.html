@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula 1 - Demonstração</title>
+<style>
+/* ESTILOS */
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',sans-serif; background:#0f172a; color:#e2e8f0; }
+
+.topbar { position:fixed; top:0; left:0; right:0; height:50px; background:#1e293b; display:flex; align-items:center; justify-content:space-between; padding:0 20px; border-bottom:2px solid #334155; z-index:100; }
+.topbar h1 { font-size:18px; }
+#timer { font-size:14px; background:#0f172a; padding:4px 12px; border-radius:6px; font-family:monospace; }
+
+.controls { position:fixed; top:50px; left:0; right:0; height:44px; background:#1e293b; display:flex; align-items:center; gap:8px; padding:0 20px; z-index:99; }
+.controls button { padding:6px 16px; border:none; border-radius:6px; font-size:13px; cursor:pointer; font-weight:600; }
+.btn-exec { background:#10b981; color:#fff; }
+.btn-exec:disabled { background:#475569; cursor:not-allowed; }
+.btn-reset { background:#ef4444; color:#fff; }
+.btn-rapido { background:#f59e0b; color:#fff; }
+.btn-rapido.ativo { background:#d97706; }
+
+.container { display:flex; margin-top:94px; min-height:calc(100vh - 94px - 50px); }
+.editor { width:50%; background:#1e293b; padding:16px; font-family:'Courier New',monospace; font-size:14px; line-height:1.6; overflow:auto; white-space:pre-wrap; }
+.output { width:50%; background:#ecfeff; padding:16px; font-family:'Courier New',monospace; font-size:14px; line-height:1.6; color:#0f172a; overflow:auto; }
+.output .out { display:block; margin-bottom:4px; }
+.output .out::before { content:"> "; color:#64748b; }
+
+.k { color:#c084fc; } .v { color:#34d399; } .s { color:#fbbf24; } .cm { color:#6b7280; font-style:italic; }
+
+.footer { display:flex; align-items:center; justify-content:space-between; padding:0 20px; height:50px; background:#1e293b; border-top:2px solid #334155; }
+.footer a { color:#fbbf24; text-decoration:none; font-weight:600; padding:8px 16px; background:#334155; border-radius:6px; font-size:13px; }
+
+@media(max-width:768px) { .container { flex-direction:column; } .editor,.output { width:100%; } }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>💻 Aula 1 · Demonstração</h1>
+  <div id="timer">00:00</div>
+</div>
+
+<div class="controls">
+  <button class="btn-exec" id="btnExecutar" onclick="iniciarDemo()">▶ Executar</button>
+  <button class="btn-reset" onclick="resetarDemo()">⏹ Reset</button>
+  <button class="btn-rapido" id="btnRapido" onclick="alternarVelocidade()">⚡ Rápido</button>
+</div>
+
+<div class="container">
+  <div class="editor" id="editor"></div>
+  <div class="output" id="output"></div>
+</div>
+
+<div class="footer">
+  <span>💻 Aula 1 · Projeto @karizeviecelli</span>
+  <a href="03_pratica.html">➜ Seguir para a Prática</a>
+</div>
+
+<script>
+// Códigos e saídas
+const codigos = [
+  'console.log("Olá, mundo!");',
+  'console.log("Meu nome é Sora");',
+  'console.log("Estou aprendendo JavaScript");',
+  'console.log(10 + 5);',
+  '// Isso é um comentário'
+];
+
+const saidas = [
+  'Olá, mundo!',
+  'Meu nome é Sora',
+  'Estou aprendendo JavaScript',
+  '15'
+];
+
+var linhaAtual = 0;
+var charAtual = 0;
+var timerDigitacao = null;
+var timerRelogio = null;
+var segundos = 0;
+var modoRapido = false;
+var executando = false;
+
+const editor = document.getElementById('editor');
+const output = document.getElementById('output');
+const timerEl = document.getElementById('timer');
+const btnExec = document.getElementById('btnExecutar');
+const btnRap = document.getElementById('btnRapido');
+
+function iniciarDemo() {
+  if (executando) return;
+  resetarDemo();
+  executando = true;
+  btnExec.disabled = true;
+  
+  // Iniciar timer
+  timerRelogio = setInterval(function() {
+    segundos++;
+    var m = Math.floor(segundos / 60);
+    var s = segundos % 60;
+    timerEl.textContent = 
+      (m < 10 ? '0' : '') + m + ':' + 
+      (s < 10 ? '0' : '') + s;
+  }, 1000);
+  
+  // Criar linhas no editor
+  for (var i = 0; i < codigos.length; i++) {
+    var div = document.createElement('div');
+    div.id = 'linha-' + i;
+    div.style.marginBottom = '4px';
+    editor.appendChild(div);
+  }
+  
+  linhaAtual = 0;
+  charAtual = 0;
+  digitarProximo();
+}
+
+function digitarProximo() {
+  if (linhaAtual >= codigos.length) {
+    // Finalizou
+    clearInterval(timerRelogio);
+    executando = false;
+    btnExec.disabled = false;
+    aplicarHighlight();
+    mostrarSaidas();
+    return;
+  }
+  
+  var linha = codigos[linhaAtual];
+  var el = document.getElementById('linha-' + linhaAtual);
+  
+  if (charAtual < linha.length) {
+    el.textContent += linha[charAtual];
+    charAtual++;
+    var delay = modoRapido ? 20 : 80;
+    timerDigitacao = setTimeout(digitarProximo, delay);
+  } else {
+    linhaAtual++;
+    charAtual = 0;
+    timerDigitacao = setTimeout(digitarProximo, 300);
+  }
+}
+
+function aplicarHighlight() {
+  for (var i = 0; i < codigos.length; i++) {
+    var el = document.getElementById('linha-' + i);
+    if (!el) continue;
+    var texto = codigos[i];
+    var html = '';
+    var tokens = texto.split(/(\"[^\"]*\"|\/\/[^\n]*|\b\d+\b|console\.log)/g);
+    for (var t = 0; t < tokens.length; t++) {
+      var tok = tokens[t];
+      if (/^".*"$/.test(tok)) html += '<span class="s">' + tok + '</span>';
+      else if (/^\/\//.test(tok)) html += '<span class="cm">' + tok + '</span>';
+      else if (/^\d+$/.test(tok)) html += '<span class="v">' + tok + '</span>';
+      else if (tok === 'console.log') html += '<span class="k">console</span><span class="k">.log</span>';
+      else html += tok;
+    }
+    el.innerHTML = html;
+  }
+}
+
+function mostrarSaidas() {
+  output.innerHTML = '';
+  for (var i = 0; i < saidas.length; i++) {
+    var div = document.createElement('div');
+    div.className = 'out';
+    div.textContent = saidas[i];
+    output.appendChild(div);
+  }
+}
+
+function resetarDemo() {
+  clearTimeout(timerDigitacao);
+  clearInterval(timerRelogio);
+  timerDigitacao = null;
+  timerRelogio = null;
+  segundos = 0;
+  executando = false;
+  btnExec.disabled = false;
+  timerEl.textContent = '00:00';
+  editor.innerHTML = '';
+  output.innerHTML = '';
+  linhaAtual = 0;
+  charAtual = 0;
+}
+
+function alternarVelocidade() {
+  modoRapido = !modoRapido;
+  btnRap.classList.toggle('ativo');
+  btnRap.textContent = modoRapido ? '⚡ Normal' : '⚡ Rápido';
+}
+</script>
+</body>
+</html>

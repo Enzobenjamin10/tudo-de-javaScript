@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula 1 - Introdução ao JavaScript</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #0891b2;
+      color: white;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .topbar h1 {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    #timer {
+      font-size: 1rem;
+      font-family: 'Courier New', monospace;
+      background: rgba(255,255,255,0.2);
+      padding: 4px 12px;
+      border-radius: 4px;
+    }
+    .slides-container {
+      margin-top: 70px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+    }
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 800px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      padding: 40px;
+      animation: fadeIn 0.4s ease;
+    }
+    .slide.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .slide h2 {
+      font-size: 1.8rem;
+      margin-bottom: 16px;
+      color: #0891b2;
+    }
+    .slide p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .slide ul {
+      margin-left: 20px;
+      margin-bottom: 12px;
+    }
+    .slide li {
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    .code-block {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      margin: 12px 0;
+      overflow-x: auto;
+    }
+    .highlight-box {
+      background: #e0f2fe;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 12px 0;
+      border-left: 4px solid #0891b2;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: #0891b2;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 12px;
+      transition: background 0.3s;
+    }
+    .cta-btn:hover {
+      background: #076e8a;
+    }
+    .navigation {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+    }
+    .nav-btn {
+      background: #0891b2;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .nav-btn:hover {
+      background: #076e8a;
+    }
+    .nav-btn:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+    .dots {
+      display: flex;
+      gap: 8px;
+    }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .dot.active {
+      background: #0891b2;
+    }
+    .footer {
+      text-align: center;
+      padding: 16px;
+      background: #e2e8f0;
+      color: #475569;
+      font-size: 0.9rem;
+    }
+    @media (max-width: 600px) {
+      .slide { padding: 20px; }
+      .slide h2 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <h1>Aula 1 - Introdução ao JavaScript</h1>
+    <div id="timer">00:00</div>
+  </div>
+  <div class="slides-container">
+    <div class="slide active" id="slide1">
+      <h2>O que é JavaScript?</h2>
+      <p>JavaScript (JS) é a linguagem mais popular da web. Ela roda direto no navegador, sem precisar instalar nada. Com JS podemos criar sites interativos, jogos, animações e validar formulários. É uma linguagem de alto nível (fácil de ler) e interpretada (roda linha por linha).</p>
+    </div>
+    <div class="slide" id="slide2">
+      <h2>Ferramentas: navegador e editor</h2>
+      <p>Para programar em JS você só precisa de duas ferramentas: um navegador (Chrome, Firefox, Edge) e um editor de código (VS Code, Sublime, ou até o Bloco de Notas). O navegador executa o código, o editor ajuda a escrever.</p>
+      <div class="highlight-box">Dica: Use o Chrome e aperte F12 para abrir o console.</div>
+    </div>
+    <div class="slide" id="slide3">
+      <h2>Seu primeiro programa</h2>
+      <p>Abra o console (F12, aba Console). Digite:</p>
+      <div class="code-block">console.log("Olá, mundo!");</div>
+      <p>e aperte Enter. <code>console.log()</code> exibe mensagens na tela. É como o "print" da programação — a forma mais básica de ver o resultado do seu código.</p>
+    </div>
+    <div class="slide" id="slide4">
+      <h2>Sintaxe básica</h2>
+      <p>Sintaxe são as regras de escrita do código. Em JS:</p>
+      <ul>
+        <li>Ponto e vírgula no final de cada linha <code>;</code></li>
+        <li>Parênteses para funções <code>()</code></li>
+        <li>Aspas para textos <code>""</code> ou <code>''</code></li>
+        <li>Chaves para blocos <code>{}</code></li>
+      </ul>
+      <p>O computador é exigente — um erro de sintaxe e o programa não roda.</p>
+    </div>
+    <div class="slide" id="slide5">
+      <h2>Console.log como depurador</h2>
+      <p><code>console.log()</code> não serve só para exibir mensagens. É a principal ferramenta de depuração (debugging). Você pode exibir valores de variáveis, verificar se uma parte do código executou, e entender o fluxo do programa.</p>
+      <div class="code-block">console.log("Chegou aqui!");
+console.log("Valor de x:", x);</div>
+    </div>
+    <div class="slide" id="slide6">
+      <h2>Pensamento Computacional</h2>
+      <p>É a habilidade de resolver problemas de forma lógica, organizando o raciocínio em passos claros. Os 4 pilares:</p>
+      <ul>
+        <li><strong>Decomposição</strong>: quebrar em partes</li>
+        <li><strong>Reconhecimento de Padrões</strong>: identificar repetições</li>
+        <li><strong>Abstração</strong>: focar no essencial</li>
+        <li><strong>Algoritmos</strong>: sequência de passos</li>
+      </ul>
+    </div>
+    <div class="slide" id="slide7">
+      <h2>Comentários no código</h2>
+      <p>Comentários são ignorados pelo computador. Servem para humanos se entenderem.</p>
+      <div class="code-block">// comentário de uma linha
+/* comentário
+   de várias linhas */</div>
+      <p>Use comentários para explicar a lógica, documentar seu código e organizar seções. É uma boa prática desde o início.</p>
+    </div>
+    <div class="slide" id="slide8">
+      <h2>Boas práticas iniciais</h2>
+      <p>Use nomes claros para variáveis, mantenha indentação organizada, comente o código, teste pequenas partes de cada vez. O programador iniciante que cria bons hábitos desde o começo se torna um profissional melhor.</p>
+      <a href="02_demo.html" class="cta-btn">➜ Seguir para a Demonstração</a>
+    </div>
+  </div>
+  <div class="navigation">
+    <button class="nav-btn" id="prevBtn" disabled>◀</button>
+    <div class="dots" id="dotsContainer">
+      <span class="dot active" data-slide="0"></span>
+      <span class="dot" data-slide="1"></span>
+      <span class="dot" data-slide="2"></span>
+      <span class="dot" data-slide="3"></span>
+      <span class="dot" data-slide="4"></span>
+      <span class="dot" data-slide="5"></span>
+      <span class="dot" data-slide="6"></span>
+      <span class="dot" data-slide="7"></span>
+    </div>
+    <button class="nav-btn" id="nextBtn">▶</button>
+  </div>
+  <footer class="footer">📖 Aula 1 · Projeto @karizeviecelli</footer>
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const totalSlides = slides.length;
+
+    function updateSlide() {
+      slides.forEach((slide, index) => {
+        slide.classList.toggle('active', index === currentSlide);
+      });
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+      });
+      prevBtn.disabled = currentSlide === 0;
+      nextBtn.disabled = currentSlide === totalSlides - 1;
+    }
+
+    function goToSlide(index) {
+      if (index >= 0 && index < totalSlides) {
+        currentSlide = index;
+        updateSlide();
+      }
+    }
+
+    prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+    nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        goToSlide(parseInt(dot.dataset.slide));
+      });
+    });
+
+    // Timer
+    let seconds = 0;
+    const timerEl = document.getElementById('timer');
+    setInterval(() => {
+      seconds++;
+      const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+      const secs = (seconds % 60).toString().padStart(2, '0');
+      timerEl.textContent = `${mins}:${secs}`;
+    }, 1000);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') goToSlide(currentSlide + 1);
+      if (e.key === 'ArrowLeft') goToSlide(currentSlide - 1);
+    });
+  </script>
+</body>
+</html>

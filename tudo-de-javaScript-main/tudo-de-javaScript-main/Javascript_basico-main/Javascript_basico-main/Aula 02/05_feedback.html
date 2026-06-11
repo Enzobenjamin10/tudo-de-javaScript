@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback - Aula 2: Variáveis e Constantes</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f2f5;
+      color: #333;
+    }
+    /* Topbar */
+    .topbar {
+      background: linear-gradient(135deg, #4a90d9, #1e3c72);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .topbar .clock {
+      font-size: 16px;
+      font-weight: normal;
+    }
+    /* Subtopo */
+    .subtopo {
+      background: white;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #e0e0e0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .subtopo h1 {
+      font-size: 24px;
+      color: #1e3c72;
+    }
+    .subtopo .badge {
+      background: #4a90d9;
+      color: white;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 14px;
+    }
+    /* Painel média */
+    .painel-media {
+      background: white;
+      margin: 16px 24px;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .painel-media .media-valor {
+      font-size: 48px;
+      font-weight: bold;
+      color: #1e3c72;
+    }
+    .painel-media .barra-container {
+      flex: 1;
+    }
+    .painel-media .barra {
+      height: 12px;
+      background: #e0e0e0;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .painel-media .barra-preenchimento {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #4a90d9, #1e3c72);
+      transition: width 0.3s;
+      border-radius: 6px;
+    }
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+      padding: 0 24px 24px;
+    }
+    /* Card */
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      position: relative;
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      transform: scale(1.01);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #4a90d9;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .card-header .nome {
+      flex: 1;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .status {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    .status.pendente { background: #ffa726; color: white; }
+    .status.apresentando { background: #42a5f5; color: white; }
+    .status.apresentado { background: #66bb6a; color: white; }
+    /* Estrelas */
+    .estrelas {
+      display: flex;
+      gap: 4px;
+      margin: 8px 0;
+    }
+    .estrelas .estrela {
+      font-size: 28px;
+      cursor: pointer;
+      color: #ddd;
+      transition: color 0.2s;
+    }
+    .estrelas .estrela.ativa {
+      color: #ffb300;
+    }
+    .nota {
+      font-weight: bold;
+      margin: 4px 0 8px;
+    }
+    /* Critérios checkboxes */
+    .criterios {
+      margin: 8px 0;
+    }
+    .criterios label {
+      display: block;
+      font-size: 14px;
+      margin: 4px 0;
+      cursor: pointer;
+    }
+    .criterios input[type="checkbox"] {
+      margin-right: 6px;
+    }
+    /* Textarea */
+    textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      resize: vertical;
+      font-family: inherit;
+      margin-top: 8px;
+    }
+    .acoes {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .acoes button {
+      border: none;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .acoes button.btn-apresentando {
+      background: #42a5f5;
+      color: white;
+    }
+    .acoes button.btn-apresentando:hover { background: #1e88e5; }
+    .acoes button.btn-concluido {
+      background: #66bb6a;
+      color: white;
+    }
+    .acoes button.btn-concluido:hover { background: #43a047; }
+    .acoes button.btn-remover {
+      background: #ef5350;
+      color: white;
+    }
+    .acoes button.btn-remover:hover { background: #e53935; }
+    /* Botão adicionar */
+    .btn-adicionar {
+      display: block;
+      margin: 0 auto 24px;
+      background: #4a90d9;
+      color: white;
+      border: none;
+      padding: 16px 32px;
+      font-size: 18px;
+      border-radius: 40px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(74,144,217,0.3);
+      transition: background 0.2s;
+    }
+    .btn-adicionar:hover {
+      background: #357abd;
+    }
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .modal-overlay.ativo {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .modal h2 {
+      margin-bottom: 16px;
+      color: #1e3c72;
+    }
+    .modal input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+    .modal .modal-botoes {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+    .modal .modal-botoes button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .modal .modal-botoes .btn-salvar {
+      background: #4a90d9;
+      color: white;
+    }
+    .modal .modal-botoes .btn-cancelar {
+      background: #e0e0e0;
+      color: #333;
+    }
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 16px;
+      background: #1e3c72;
+      color: white;
+      font-size: 14px;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <span>📊 Painel de Apresentações — Aula 2</span>
+    <span class="clock" id="clock"></span>
+  </header>
+
+  <!-- Subtopo -->
+  <div class="subtopo">
+    <h1>Variáveis e Constantes</h1>
+    <span class="badge" id="alunosBadge">0 alunos</span>
+  </div>
+
+  <!-- Painel média -->
+  <div class="painel-media">
+    <div class="media-valor" id="mediaValor">0.0</div>
+    <div class="barra-container">
+      <div>Média da turma</div>
+      <div class="barra">
+        <div class="barra-preenchimento" id="barraPreenchimento" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid de cards -->
+  <div class="grid" id="gridCards">
+    <!-- Cards serão renderizados pelo JS -->
+  </div>
+
+  <!-- Botão adicionar -->
+  <button class="btn-adicionar" id="btnAdicionar">+ Adicionar Aluno</button>
+
+  <!-- Modal adicionar aluno -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <h2>Adicionar Aluno</h2>
+      <input type="text" id="inputNome" placeholder="Nome do aluno" />
+      <div class="modal-botoes">
+        <button class="btn-cancelar" id="btnCancelar">Cancelar</button>
+        <button class="btn-salvar" id="btnSalvar">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>📊 Aula 2 · Projeto @karizeviecelli</footer>
+
+  <script>
+    (function() {
+      // Constantes dos critérios
+      const CRITERIOS = [
+        'Declarou variáveis com let corretamente',
+        'Usou const para valores fixos',
+        'Identificou tipos primitivos corretamente',
+        'Utilizou typeof na verificação',
+        'Código executa sem erros'
+      ];
+
+      // Chave do localStorage
+      const STORAGE_KEY = 'feedback_aula2_alunos';
+
+      // Elementos do DOM
+      const grid = document.getElementById('gridCards');
+      const mediaValorEl = document.getElementById('mediaValor');
+      const barraPreenchimento = document.getElementById('barraPreenchimento');
+      const alunosBadge = document.getElementById('alunosBadge');
+      const btnAdicionar = document.getElementById('btnAdicionar');
+      const modalOverlay = document.getElementById('modalOverlay');
+      const inputNome = document.getElementById('inputNome');
+      const btnSalvar = document.getElementById('btnSalvar');
+      const btnCancelar = document.getElementById('btnCancelar');
+      const clockEl = document.getElementById('clock');
+
+      // Relógio
+      function atualizarRelogio() {
+        const agora = new Date();
+        clockEl.textContent = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      }
+      atualizarRelogio();
+      setInterval(atualizarRelogio, 1000);
+
+      // Carregar alunos do localStorage
+      let alunos = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+      // Função para salvar
+      function salvar() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(alunos));
+      }
+
+      // Função para calcular média
+      function calcularMedia() {
+        if (alunos.length === 0) return 0;
+        const total = alunos.reduce((acc, aluno) => acc + (aluno.nota || 0), 0);
+        return total / alunos.length;
+      }
+
+      // Função para atualizar painel
+      function atualizarPainel() {
+        const media = calcularMedia();
+        mediaValorEl.textContent = media.toFixed(1);
+        const percent = (media / 5) * 100;
+        barraPreenchimento.style.width = percent + '%';
+        alunosBadge.textContent = alunos.length + ' aluno' + (alunos.length !== 1 ? 's' : '');
+      }
+
+      // Função para renderizar cards
+      function renderizar() {
+        grid.innerHTML = '';
+        alunos.forEach((aluno, index) => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.dataset.index = index;
+
+          // Cabeçalho
+          const header = document.createElement('div');
+          header.className = 'card-header';
+          const avatar = document.createElement('div');
+          avatar.className = 'avatar';
+          avatar.textContent = aluno.nome.charAt(0).toUpperCase();
+          const nome = document.createElement('span');
+          nome.className = 'nome';
+          nome.textContent = aluno.nome;
+          const statusSpan = document.createElement('span');
+          statusSpan.className = 'status ' + (aluno.status || 'pendente');
+          statusSpan.textContent = (aluno.status || 'pendente');
+          header.appendChild(avatar);
+          header.appendChild(nome);
+          header.appendChild(statusSpan);
+          card.appendChild(header);
+
+          // Estrelas
+          const estrelasDiv = document.createElement('div');
+          estrelasDiv.className = 'estrelas';
+          for (let i = 1; i <= 5; i++) {
+            const estrela = document.createElement('span');
+            estrela.className = 'estrela' + (i <= (aluno.nota || 0) ? ' ativa' : '');
+            estrela.dataset.valor = i;
+            estrela.textContent = '★';
+            estrelasDiv.appendChild(estrela);
+          }
+          card.appendChild(estrelasDiv);
+
+          // Nota
+          const notaP = document.createElement('p');
+          notaP.className = 'nota';
+          notaP.textContent = 'Nota: ' + (aluno.nota || 0) + ' / 5';
+          card.appendChild(notaP);
+
+          // Critérios checkboxes
+          const criteriosDiv = document.createElement('div');
+          criteriosDiv.className = 'criterios';
+          CRITERIOS.forEach((criterio, idx) => {
+            const label = document.createElement('label');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'criterio-checkbox';
+            checkbox.dataset.criterio = idx;
+            // Verificar se já está marcado
+            if (aluno.criterios && aluno.criterios[idx]) {
+              checkbox.checked = true;
+            }
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(' ' + criterio));
+            criteriosDiv.appendChild(label);
+          });
+          card.appendChild(criteriosDiv);
+
+          // Textarea observação
+          const textarea = document.createElement('textarea');
+          textarea.className = 'observacao';
+          textarea.placeholder = 'Observação...';
+          textarea.value = aluno.observacao || '';
+          card.appendChild(textarea);
+
+          // Botões ação
+          const acoesDiv = document.createElement('div');
+          acoesDiv.className = 'acoes';
+          const btnApresentando = document.createElement('button');
+          btnApresentando.className = 'btn-apresentando';
+          btnApresentando.textContent = '🔵 Apresentando';
+          const btnConcluido = document.createElement('button');
+          btnConcluido.className = 'btn-concluido';
+          btnConcluido.textContent = '🟢 Concluído';
+          const btnRemover = document.createElement('button');
+          btnRemover.className = 'btn-remover';
+          btnRemover.textContent = '✕ Remover';
+          acoesDiv.appendChild(btnApresentando);
+          acoesDiv.appendChild(btnConcluido);
+          acoesDiv.appendChild(btnRemover);
+          card.appendChild(acoesDiv);
+
+          grid.appendChild(card);
+        });
+        atualizarPainel();
+      }
+
+      // Função para atualizar aluno no array e salvar
+      function atualizarAluno(index, dados) {
+        if (index >= 0 && index < alunos.length) {
+          alunos[index] = { ...alunos[index], ...dados };
+          salvar();
+          renderizar();
+        }
+      }
+
+      // Delegar eventos no grid
+      grid.addEventListener('click', function(e) {
+        const card = e.target.closest('.card');
+        if (!card) return;
+        const index = parseInt(card.dataset.index);
+
+        // Estrelas
+        if (e.target.classList.contains('estrela')) {
+          const valor = parseInt(e.target.dataset.valor);
+          atualizarAluno(index, { nota: valor });
+          return;
+        }
+
+        // Botões de ação
+        if (e.target.classList.contains('btn-apresentando')) {
+          atualizarAluno(index, { status: 'apresentando' });
+          return;
+        }
+        if (e.target.classList.contains('btn-concluido')) {
+          atualizarAluno(index, { status: 'apresentado' });
+          return;
+        }
+        if (e.target.classList.contains('btn-remover')) {
+          if (confirm('Remover aluno?')) {
+            alunos.splice(index, 1);
+            salvar();
+            renderizar();
+          }
+          return;
+        }
+      });
+
+      // Delegar para checkboxes e textarea (change/input)
+      grid.addEventListener('change', function(e) {
+        const card = e.target.closest('.card');
+        if (!card) return;
+        const index = parseInt(card.dataset.index);
+
+        if (e.target.classList.contains('criterio-checkbox')) {
+          const idx = parseInt(e.target.dataset.criterio);
+          const aluno = alunos[index];
+          if (!aluno.criterios) aluno.criterios = [];
+          aluno.criterios[idx] = e.target.checked;
+          salvar();
+          // Não renderiza para não perder foco - apenas atualiza painel
+          atualizarPainel();
+          return;
+        }
+      });
+
+      grid.addEventListener('input', function(e) {
+        const card = e.target.closest('.card');
+        if (!card) return;
+        const index = parseInt(card.dataset.index);
+
+        if (e.target.classList.contains('observacao')) {
+          atualizarAluno(index, { observacao: e.target.value });
+          return;
+        }
+      });
+
+      // Modal
+      function abrirModal() {
+        modalOverlay.classList.add('ativo');
+        inputNome.value = '';
+        inputNome.focus();
+      }
+
+      function fecharModal() {
+        modalOverlay.classList.remove('ativo');
+      }
+
+      function adicionarAluno() {
+        const nome = inputNome.value.trim();
+        if (!nome) {
+          alert('Digite um nome.');
+          return;
+        }
+        const novo = {
+          nome: nome,
+          nota: 0,
+          status: 'pendente',
+          criterios: [false, false, false, false, false],
+          observacao: ''
+        };
+        alunos.push(novo);
+        salvar();
+        fecharModal();
+        renderizar();
+      }
+
+      btnAdicionar.addEventListener('click', abrirModal);
+      btnSalvar.addEventListener('click', adicionarAluno);
+      btnCancelar.addEventListener('click', fecharModal);
+      modalOverlay.addEventListener('click', function(e) {
+        if (e.target === modalOverlay) fecharModal();
+      });
+      inputNome.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') adicionarAluno();
+      });
+
+      // Render inicial
+      renderizar();
+    })();
+  </script>
+</body>
+</html>

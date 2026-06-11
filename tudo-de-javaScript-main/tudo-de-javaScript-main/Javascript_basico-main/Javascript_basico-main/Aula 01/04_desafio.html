@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 1 - Missão Primeiro Programa</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            padding: 24px 32px 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #f59e0b;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header .btn-feedback {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            opacity: 0.5;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .header .btn-feedback.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Context */
+        .context {
+            background: #e0f2fe;
+            padding: 16px 32px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Main two columns */
+        .main {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 24px 32px;
+            gap: 24px;
+        }
+
+        .left-column,
+        .right-column {
+            flex: 1 1 45%;
+            min-width: 280px;
+        }
+
+        .left-column h2,
+        .right-column h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        .requisito {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .requisito input[type="checkbox"] {
+            margin-right: 12px;
+            margin-top: 2px;
+        }
+
+        .requisito label {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .requisito label .desc {
+            font-weight: 500;
+        }
+
+        .requisito label .code {
+            font-family: monospace;
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #475569;
+        }
+
+        .right-column .section {
+            margin-bottom: 20px;
+        }
+
+        .right-column .section h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .right-column .section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .right-column .section li {
+            font-size: 14px;
+            margin-bottom: 4px;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .right-column .section li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #3b82f6;
+        }
+
+        .bonus {
+            background: #fef3c7;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .bonus h3 {
+            margin-bottom: 4px;
+        }
+
+        /* Timer and progress */
+        .timer-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 32px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+        }
+
+        .timer {
+            font-size: 18px;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .timer-controls button {
+            background: #e2e8f0;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .timer-controls button:hover {
+            background: #cbd5e1;
+        }
+
+        .progress {
+            flex: 1;
+            text-align: right;
+        }
+
+        .progress span {
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-top: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: #22c55e;
+            transition: width 0.3s;
+        }
+
+        /* Reference and CTA */
+        .reference {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 16px 32px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .reference code {
+            background: #334155;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .cta {
+            text-align: center;
+            padding: 20px 32px;
+        }
+
+        .cta a {
+            display: inline-block;
+            background: #8b5cf6;
+            color: white;
+            padding: 12px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        /* Mission complete message */
+        .mission-complete {
+            display: none;
+            text-align: center;
+            padding: 16px;
+            background: #d1fae5;
+            color: #065f46;
+            font-size: 20px;
+            font-weight: 700;
+            border-top: 1px solid #a7f3d0;
+        }
+
+        .mission-complete.show {
+            display: block;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 16px;
+            font-size: 14px;
+            color: #64748b;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="badge">Desafio Autônomo · 40 min</span>
+            <h1>Missão Primeiro Programa — console.log e mensagens</h1>
+            <a href="05_feedback.html" class="btn-feedback" id="feedbackBtn">Feedback →</a>
+        </div>
+        <div class="context">
+            Você é um Robô que acaba de ser ativado. Sua primeira missão é aprender a se comunicar através do console.
+            Complete os 4 requisitos para ativar seu sistema de comunicação.
+        </div>
+        <div class="main">
+            <div class="left-column">
+                <h2>📝 Requisitos — marque conforme concluir</h2>
+                <div class="requisito">
+                    <input type="checkbox" id="req1" data-index="0">
+                    <label for="req1">
+                        <span class="desc">1. Mensagem de ativação</span>
+                        <span class="code">("Robô ativado com sucesso!");</span>
+                    </label>
+                </div>
+                <div class="requisito">
+                    <input type="checkbox" id="req2" data-index="1">
+                    <label for="req2">
+                        <span class="desc">2. Apresentar nome</span>
+                        <span class="code">("Meu nome é R2D2");</span>
+                    </label>
+                </div>
+                <div class="requisito">
+                    <input type="checkbox" id="req3" data-index="2">
+                    <label for="req3">
+                        <span class="desc">3. Mostrar nível</span>
+                        <span class="code">(5);</span>
+                    </label>
+                </div>
+                <div class="requisito">
+                    <input type="checkbox" id="req4" data-index="3">
+                    <label for="req4">
+                        <span class="desc">4. Missão completa</span>
+                        <span class="code">("Missão concluída!");</span>
+                    </label>
+                </div>
+            </div>
+            <div class="right-column">
+                <div class="section">
+                    <h3>📋 O que entregar</h3>
+                    <ul>
+                        <li>Código com 4 console.log</li>
+                        <li>Mensagem de ativação e nome</li>
+                        <li>Número do nível</li>
+                        <li>Mensagem final</li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <h3>⭐ Critérios de Avaliação</h3>
+                    <ul>
+                        <li>Usou 4 console.log</li>
+                        <li>Mensagens em sequência lógica</li>
+                        <li>Código executa sem erros</li>
+                        <li>Usou strings e números</li>
+                    </ul>
+                </div>
+                <div class="bonus">
+                    <h3>🏆 Bônus</h3>
+                    <p>Usou comentários para explicar o código</p>
+                </div>
+            </div>
+        </div>
+        <div class="timer-bar">
+            <div class="timer" id="timerDisplay">⏱ 00:00</div>
+            <div class="timer-controls">
+                <button id="startBtn">▶ Iniciar Missão</button>
+                <button id="resetBtn">⏹ Reset</button>
+            </div>
+            <div class="progress">
+                <span id="progressText">0 / 4 requisitos</span>
+                <div class="progress-bar">
+                    <div class="progress-bar-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+        <div class="reference">
+            <code>console.log("texto");</code> <code>console.log(123);</code>
+        </div>
+        <div class="cta">
+            <a href="05_feedback.html">➜ Ver Feedback do Professor</a>
+        </div>
+        <div id="missionComplete" class="mission-complete">
+            🎉 Missão Cumprida!
+        </div>
+        <div class="footer">
+            🏆 Aula 1 · Projeto @karizeviecelli
+        </div>
+    </div>
+    <script>
+        (function () {
+            const checkboxes = document.querySelectorAll('.requisito input[type="checkbox"]');
+            const progressText = document.getElementById('progressText');
+            const progressFill = document.getElementById('progressFill');
+            const feedbackBtn = document.getElementById('feedbackBtn');
+            const missionComplete = document.getElementById('missionComplete');
+            const timerDisplay = document.getElementById('timerDisplay');
+            const startBtn = document.getElementById('startBtn');
+            const resetBtn = document.getElementById('resetBtn');
+
+            let timerInterval = null;
+            let seconds = 0;
+            let isRunning = false;
+
+            function updateProgress() {
+                let count = 0;
+                checkboxes.forEach(cb => { if (cb.checked) count++; });
+                progressText.textContent = count + ' / 4 requisitos';
+                progressFill.style.width = (count / 4 * 100) + '%';
+                if (count === 4) {
+                    feedbackBtn.classList.add('active');
+                    missionComplete.classList.add('show');
+                } else {
+                    feedbackBtn.classList.remove('active');
+                    missionComplete.classList.remove('show');
+                }
+            }
+
+            function updateTimer() {
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                timerDisplay.textContent = '⏱ ' + String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+            }
+
+            function startTimer() {
+                if (isRunning) return;
+                isRunning = true;
+                timerInterval = setInterval(() => {
+                    seconds++;
+                    updateTimer();
+                }, 1000);
+            }
+
+            function stopTimer() {
+                clearInterval(timerInterval);
+                isRunning = false;
+            }
+
+            function resetTimer() {
+                stopTimer();
+                seconds = 0;
+                updateTimer();
+            }
+
+            checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+            startBtn.addEventListener('click', startTimer);
+            resetBtn.addEventListener('click', resetTimer);
+
+            updateProgress();
+        })();
+    </script>
+</body>
+
+</html>
