@@ -79,7 +79,8 @@ let filmes = [
 for(let i = 0; i < filmes.length; i++){
     console.log(filmes[i]);
 }
-    */
+*/
+/*
 notas=[7,8,10,5]
 
 let soma = 0
@@ -88,3 +89,34 @@ for(let i =0; i < notas.lenght; i++){
     soma = soma + notas(i)
 }
 alert("valor total: "+ soma)
+*/
+/*
+let vetor = [5, 10, 8, 7];
+let soma = 0;
+for (let i = 0; i < vetor.length; i++) {
+    soma = soma + vetor[i];
+}
+let media = soma / vetor.length;
+console.log("Média: " + media);
+*/
+/*
+let idades = [15, 18, 22, 13, 30];
+let maior = idades[0];
+for (let i = 1; i < idades.length; i++) {
+    if (idades[i] > maior) {
+        maior = idades[i];
+    }
+}
+
+console.log("Maior idade: " + maior);
+*/
+/*
+let precos = [10.50, 25.00, 8.99, 12.75];
+let menor = precos[0];
+for (let i = 1; i < precos.length; i++) {
+    if (precos[i] < menor) {
+        menor = precos[i];
+    }
+}
+console.log("Menor preço: " + menor);
+*/
